@@ -2,45 +2,45 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = 3000;
 
-const postsFile = path.join(__dirname, 'posts.json');
+app.use(express.json()); // To parse JSON data sent in POST requests
 
-// Make sure posts.json exists
-if (!fs.existsSync(postsFile)) {
-  fs.writeFileSync(postsFile, '[]');
-}
+// Define the path for the posts file directly in the root folder
+const postsFilePath = path.join(__dirname, 'posts.json');
 
-// Middleware
-app.use(express.json());
-
-// Serve posts from posts.json
-app.get('/posts', (req, res) => {
-  fs.readFile(postsFile, (err, data) => {
-    if (err) return res.status(500).json([]);
+// GET route to fetch posts
+app.get('/', (req, res) => {
+  fs.readFile(postsFilePath, (err, data) => {
+    if (err) {
+      return res.status(500).json([]);
+    }
     res.json(JSON.parse(data));
   });
 });
 
-// Post new message
-app.post('/posts', (req, res) => {
+// POST route to save posts
+app.post('/', (req, res) => {
   const newPost = {
     text: req.body.text,
     timestamp: Date.now()
   };
 
-  fs.readFile(postsFile, (err, data) => {
+  fs.readFile(postsFilePath, (err, data) => {
     let posts = [];
     if (!err) posts = JSON.parse(data);
     posts.push(newPost);
-    fs.writeFile(postsFile, JSON.stringify(posts, null, 2), (err) => {
+    fs.writeFile(postsFilePath, JSON.stringify(posts, null, 2), (err) => {
       if (err) return res.status(500).send({ error: 'Failed to save post.' });
       res.status(200).send({ success: true });
     });
   });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+// Enable CORS to allow frontend access from different domains (e.g., GitHub Pages)
+const cors = require('cors');
+app.use(cors());
+
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
 });
