@@ -120,7 +120,7 @@
     const feed = document.getElementById('feed');
 
     function loadPosts() {
-      fetch('https://your-backend.onrender.com/posts')
+      fetch('https://your-backend.onrender.com/')
         .then(response => response.json())
         .then(posts => {
           feed.innerHTML = '';
@@ -141,7 +141,7 @@
       const text = input.value.trim();
       if (!text) return;
 
-      fetch('https://your-backend.onrender.com/posts', {
+      fetch('https://your-backend.onrender.com/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -160,4 +160,3 @@
 
 </body>
 </html>
-
