@@ -1,0 +1,18 @@
+{
+  "name": "leakinginfo-backend",
+  "version": "1.0.0",
+  "description": "Backend for Scuff Base Anonymous Feed",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": "14.x"
+  },
+  "author": "",
+  "license": "ISC"
+}
